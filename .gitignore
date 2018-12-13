@@ -1,0 +1,11 @@
+*.png
+.env
+example.png
+settings.json
+save.json
+node_modules
+bin
+_bin
+build
+_build
+log.txt
