@@ -39,6 +39,7 @@ module.exports = {
       const content = JSON.stringify({
         lastCheckedInDay: this.getCurrentDay()
       })
+      global.lastCheckedInDay = -1
       fs.writeFile(savePath, content, err => {
         if (err) console.log(`Error saving data file: ${err}`)
       })
