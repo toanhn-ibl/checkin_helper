@@ -13,13 +13,15 @@ utils.loadSaveData()
 console.log('Suiting up, please wait...')
 if (global.lastCheckedInDay !== utils.getCurrentDay()) {
   notifier({ ...settings, isCheckIn: true })
+} else if (utils.getCurrentHour() >= 18 && utils.getCurrentHour() <= 20) {
+  notifier({ ...settings, isCheckIn: false })
 } else {
   console.log(`Already checked in, I'll remind you when it's time to check out`)
 }
 
 // initialize last timer
 let lastTime = new Date().getTime()
-let tick = 6
+let tick = 0
 
 // schedule for background job
 function setScheduler () {

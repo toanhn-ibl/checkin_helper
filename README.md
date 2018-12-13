@@ -9,7 +9,7 @@ USERNAME=<your_email>
 PASSWORD=<your_password>
 ```
 - `npm start`
-- Wait for the notification to display, then choose `Show` > `Check in` | `Check out`
+- Wait for the notification to display, then click on it to proceed
 
 # How to run standalone version
 - Create a `settings.json` in same folder as your executable file with content:
