@@ -35,7 +35,11 @@ function setScheduler () {
       if (global.lastCheckedInDay !== utils.getCurrentDay()) {
         notifier({ ...settings, isCheckIn: true })
       } else {
-        if (utils.getCurrentHour() >= 18 && utils.getCurrentHour() <= 20) {
+        if (
+          global.isCheckedIn === true &&
+          utils.getCurrentHour() >= 18 &&
+          utils.getCurrentHour() <= 20
+        ) {
           // trigger every 30 minutes
           if (tick <= 0) {
             notifier({ ...settings, isCheckIn: false })
