@@ -9,6 +9,8 @@ const executablePath = process.pkg
     )
   : puppeteer.executablePath()
 
+const savePath = `${executablePath}/lastProof.png`
+
 module.exports = async args => {
   const { isCheckIn, username, password, headless } = args
   const browser = await puppeteer.launch({ headless, executablePath })
@@ -57,7 +59,7 @@ module.exports = async args => {
       }
     })
 
-  await page.screenshot({ path: './lastProof.png' })
+  await page.screenshot({ path: savePath })
 
   await browser.close()
 }

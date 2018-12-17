@@ -12,8 +12,10 @@ utils.loadSaveData()
 // send check in notification
 console.log('Suiting up, please wait...')
 if (global.lastCheckedInDay !== utils.getCurrentDay()) {
+  console.log('Last check in time not match')
   notifier({ ...settings, isCheckIn: true })
 } else if (utils.getCurrentHour() >= 18 && utils.getCurrentHour() <= 20) {
+  console.log('Show check out time')
   notifier({ ...settings, isCheckIn: false })
 } else {
   console.log(`Already checked in, I'll remind you when it's time to check out`)
@@ -31,8 +33,13 @@ function setScheduler () {
 
   schedule.scheduleJob(rule, function () {
     const currentTime = new Date().getTime()
-    if (currentTime > lastTime + interval * 2) {
+    console.log('Schedule task firing ' + currentTime)
+    console.log('Current hour ' + utils.getCurrentHour())
+    if (currentTime > lastTime + interval * 2 || tick <= 0) {
+      if (currentTime > lastTime + interval * 2) { console.log('-- Resume from interrupt') } else console.log('-- Tick time...')
+
       if (global.lastCheckedInDay !== utils.getCurrentDay()) {
+        console.log('Last check in time not match')
         notifier({ ...settings, isCheckIn: true })
       } else {
         if (
@@ -41,13 +48,14 @@ function setScheduler () {
           utils.getCurrentHour() <= 20
         ) {
           // trigger every 30 minutes
-          if (tick <= 0) {
-            notifier({ ...settings, isCheckIn: false })
-            tick = 6
-          }
-          tick--
+          console.log('Show check out time')
+          notifier({ ...settings, isCheckIn: false })
         }
       }
+      tick = 6
+    } else {
+      console.log('Condition not met, sleep for now')
+      tick--
     }
     lastTime = currentTime
   })
