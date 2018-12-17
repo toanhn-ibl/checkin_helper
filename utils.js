@@ -35,11 +35,15 @@ module.exports = {
       }
       const save = require(savePath)
       global.lastCheckedInDay = save.lastCheckedInDay
+      console.log(save.lastCheckedInDay, this.getCurrentDay())
+      global.isCheckedIn = save.lastCheckedInDay === this.getCurrentDay()
     } catch (err) {
+      console.log(err)
       const content = JSON.stringify({
         lastCheckedInDay: this.getCurrentDay()
       })
       global.lastCheckedInDay = -1
+      global.isCheckedIn = false
       fs.writeFile(savePath, content, err => {
         if (err) console.log(`Error saving data file: ${err}`)
       })

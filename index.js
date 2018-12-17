@@ -23,7 +23,6 @@ if (global.lastCheckedInDay !== utils.getCurrentDay()) {
 
 // initialize last timer
 let lastTime = new Date().getTime()
-let tick = 0
 
 // schedule for background job
 function setScheduler () {
@@ -33,29 +32,34 @@ function setScheduler () {
 
   schedule.scheduleJob(rule, function () {
     const currentTime = new Date().getTime()
-    console.log('Schedule task firing ' + currentTime)
-    console.log('Current hour ' + utils.getCurrentHour())
-    if (currentTime > lastTime + interval * 2 || tick <= 0) {
-      if (currentTime > lastTime + interval * 2) { console.log('-- Resume from interrupt') } else console.log('-- Tick time...')
+    const currentHour = utils.getCurrentHour()
+    const isInCheckoutTime = currentHour >= 18 && currentHour <= 20
+    const isInterrupted = currentTime > lastTime + interval * 2
+    console.log(
+      `Schedule task firing currentTime(${currentTime})) isCheckedIn(${isCheckedIn}) isInCheckoutTime(${isInCheckoutTime})`
+    )
+    console.log('Current hour ' + currentHour)
+    if (isInterrupted) {
+      console.log('-- Resume from interrupt')
 
       if (global.lastCheckedInDay !== utils.getCurrentDay()) {
         console.log('Last check in time not match')
         notifier({ ...settings, isCheckIn: true })
       } else {
-        if (
-          global.isCheckedIn === true &&
-          utils.getCurrentHour() >= 18 &&
-          utils.getCurrentHour() <= 20
-        ) {
-          // trigger every 30 minutes
-          console.log('Show check out time')
-          notifier({ ...settings, isCheckIn: false })
-        }
+        console.log('---- Already checked in')
       }
-      tick = 6
+    } else if (isInCheckoutTime) {
+      console.log('-- Is in checkout time')
+
+      if (global.isCheckedIn === true && isInCheckoutTime) {
+        // trigger every 30 minutes
+        console.log('Show check out time')
+        notifier({ ...settings, isCheckIn: false })
+      } else {
+        console.log('---- Already checked out')
+      }
     } else {
-      console.log('Condition not met, sleep for now')
-      tick--
+      console.log(`Condition not met, sleep for now`)
     }
     lastTime = currentTime
   })
