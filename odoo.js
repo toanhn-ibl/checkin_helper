@@ -10,7 +10,7 @@ const executablePath = process.pkg
   : puppeteer.executablePath()
 
 const savePath = process.pkg
-  ? process.execPath.replace('/checkin-macos', 'lastProof.png')
+  ? process.execPath.replace('/checkin-macos', '/lastProof.png')
   : `${__dirname}/lastProof.png`
 
 module.exports = async args => {
